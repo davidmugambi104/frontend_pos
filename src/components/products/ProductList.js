@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getProducts, deleteProduct } from '../services/api';
+import { getProducts, deleteProduct } from '../../services/api';
 import { Link } from 'react-router-dom';
 
 const ProductList = () => {
