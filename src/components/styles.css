@@ -1,0 +1,121 @@
+/* General Page Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+}
+
+/* Common Container Styles */
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* List Styles */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+li span {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Transaction Type Styling */
+li.transaction-add {
+    background-color: #d4f7d4; /* Green for add transactions */
+}
+
+li.transaction-remove {
+    background-color: #f7d4d4; /* Red for remove transactions */
+}
+
+/* Reason for Removal Styling */
+li span {
+    font-style: italic;
+    color: #555;
+}
+
+/* Button Styling */
+.submit-btn {
+    padding: 12px 20px;
+    font-size: 1.2em;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.submit-btn:active {
+    background-color: #004085;
+}
+
+/* Input Field Styling */
+.form-input {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+    border-color: #007bff;
+}
+
+select.form-input {
+    cursor: pointer;
+}
+
+/* Responsive Styles for Small Screens */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    li {
+        padding: 12px;
+    }
+
+    .submit-btn {
+        padding: 10px 18px;
+    }
+}

@@ -1,0 +1,137 @@
+/* General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  body {
+    background-color: #f4f7fc;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+  }
+  
+  /* Container for the Sale Component */
+  .sale-container {
+    width: 90%;
+    max-width: 1200px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow: hidden;
+    animation: slideIn 1s ease-out;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+    position: relative;
+  }
+  
+  h2::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100px;
+    height: 2px;
+    background-color: #3b82f6;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* Add Sale Link */
+  .add-sale-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .add-sale-link:hover {
+    background-color: #2563eb;
+    transform: translateY(-5px);
+  }
+  
+  /* Sales List */
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    background-color: #f9fafb;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  li:hover {
+    transform: translateY(-5px);
+    background-color: #e2e8f0;
+  }
+  
+  /* Sale Info */
+  .sale-info {
+    font-size: 1rem;
+    color: #4b5563;
+  }
+  
+  .sale-info span {
+    font-weight: 600;
+  }
+  
+  /* Add subtle fade-in animation for sales list items */
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Mobile-Friendly */
+  @media (max-width: 768px) {
+    .sale-container {
+      width: 100%;
+      padding: 15px;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  
+    .add-sale-link {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+    }
+  
+    li {
+      font-size: 0.9rem;
+    }
+  }
+  
