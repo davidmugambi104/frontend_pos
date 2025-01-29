@@ -1,41 +1,78 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { 
+  getAdminMetrics,
+  auditUserActivity,
+  manageSecuritySettings 
+} from '../../services/api';
+import AdminSecurityModal from './AdminSecurityModal';
+import ActivityLog from './ActivityLog';
+import './css/AdminDashboard.css';
 
 const AdminDashboard = () => {
-  const [metrics, setMetrics] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [metrics, setMetrics] = useState({});
+  const [auditLogs, setAuditLogs] = useState([]);
+  const [securitySettings, setSecuritySettings] = useState({});
+  const [showSecurityModal, setShowSecurityModal] = useState(false);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
-    const fetchMetrics = async () => {
+    const loadData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/dashboard', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` // Assuming you store JWT token in localStorage
-          }
-        });
-        setMetrics(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to fetch dashboard data.');
-        setLoading(false);
+        const [metricsData, auditData, settingsData] = await Promise.all([
+          getAdminMetrics(),
+          auditUserActivity(),
+          manageSecuritySettings('get')
+        ]);
+        setMetrics(metricsData);
+        setAuditLogs(auditData);
+        setSecuritySettings(settingsData);
+      } catch (error) {
+        console.error('Admin dashboard error:', error);
       }
     };
-    fetchMetrics();
+
+    loadData();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  const handleSecurityUpdate = async (newSettings) => {
+    try {
+      const updated = await manageSecuritySettings('update', newSettings);
+      setSecuritySettings(updated);
+    } catch (error) {
+      console.error('Security update failed:', error);
+    }
+  };
 
   return (
-    <div>
-      <h2>Admin Dashboard</h2>
-      <div>
-        <h3>Total Users: {metrics.total_users}</h3>
-        <h3>Total Sales: ${metrics.total_sales}</h3>
-        <h3>Total Products: {metrics.total_products}</h3>
+    <div className="admin-dashboard">
+      <div className="dashboard-grid">
+        <div className="metrics-card">
+          <h2>System Metrics</h2>
+          <div className="metric-item">
+            <span>Active Users:</span>
+            <span>{metrics.activeUsers || 0}</span>
+          </div>
+          {/* Add more metrics */}
+        </div>
+
+        <ActivityLog logs={auditLogs} />
+        
+        <div className="security-card">
+          <h2>Security Configuration</h2>
+          <button onClick={() => setShowSecurityModal(true)}>
+            Modify Settings
+          </button>
+        </div>
       </div>
-      <button onClick={() => alert('View More Stats')}>View More Stats</button>
+
+      {showSecurityModal && (
+        <AdminSecurityModal
+          currentSettings={securitySettings}
+          onClose={() => setShowSecurityModal(false)}
+          onSave={handleSecurityUpdate}
+        />
+      )}
     </div>
   );
 };

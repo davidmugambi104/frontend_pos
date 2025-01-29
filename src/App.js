@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ProductList from './components/ProductList';
-import AddProduct from './components/AddProduct';
-import Sale from './components/Sale';
-import AddSale from './components/AddSale';
-import CustomerList from './components/CustomerList';
-import AddCustomer from './components/AddCustomer';
-import PaymentForm from './components/PaymentForm';
-import Login from './components/Login';
+import ProductList from './components/products/ProductList';
+import AddProduct from './components/products/AddProduct';
+import Sale from './components/sales/Sale';
+import AddSale from './components/sales/AddSale';
+import CustomerList from './components/customers/CustomerList';
+import AddCustomer from './components/customers/AddCustomer';
+import PaymentForm from './components/payment/PaymentForm';
+import Login from './components/authentification/Login';
+import Signup from './components/authentification/signup';
 import Header from './components/Header';
-import Signup from './components/signup';
 
 const App = () => {
   return (

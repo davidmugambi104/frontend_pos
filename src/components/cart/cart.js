@@ -1,74 +1,92 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+class Cart {
+  constructor(apiBaseUrl, authToken) {
+      this.apiBaseUrl = apiBaseUrl;
+      this.authToken = authToken;
+      this.cart = JSON.parse(localStorage.getItem('cart')) || [];
+  }
 
-const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [totalAmount, setTotalAmount] = useState(0);
-
-  useEffect(() => {
-    const fetchCart = async () => {
+  async fetchProduct(productId) {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/cart', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        setCartItems(response.data.cart_items);
-        setTotalAmount(response.data.total_amount);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to fetch cart.');
-        setLoading(false);
+          const response = await fetch(`${this.apiBaseUrl}/products/${productId}`, {
+              headers: { 'Authorization': `Bearer ${this.authToken}` }
+          });
+          return response.ok ? response.json() : null;
+      } catch (error) {
+          console.error('Error fetching product:', error);
+          return null;
       }
-    };
-    fetchCart();
-  }, []);
+  }
 
-  const checkout = async () => {
-    try {
-      await axios.post('http://127.0.0.1:5000/checkout', {}, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      alert('Checkout successful!');
-    } catch (err) {
-      setError('Checkout failed.');
-    }
-  };
+  async addToCart(productId, quantity) {
+      const product = await this.fetchProduct(productId);
+      if (!product) {
+          console.error('Product not found');
+          return;
+      }
 
-  if (loading) return <div>Loading cart...</div>;
-  if (error) return <div>{error}</div>;
+      const stockCheck = await this.validateStock(productId, quantity);
+      if (!stockCheck) {
+          console.error('Insufficient stock');
+          return;
+      }
 
-  return (
-    <div>
-      <h2>Your Cart</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cartItems.map((item) => (
-            <tr key={item.product_id}>
-              <td>{item.name}</td>
-              <td>{item.quantity}</td>
-              <td>${item.price}</td>
-              <td>${item.price * item.quantity}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <h3>Total: ${totalAmount}</h3>
-      <button onClick={checkout}>Checkout</button>
-    </div>
-  );
-};
+      const existingItem = this.cart.find(item => item.id === productId);
+      if (existingItem) {
+          existingItem.quantity += quantity;
+      } else {
+          this.cart.push({ id: productId, name: product.name, price: product.price, quantity });
+      }
+      this.updateStorage();
+  }
+
+  async validateStock(productId, quantity) {
+      try {
+          const response = await fetch(`${this.apiBaseUrl}/stock/${productId}`, {
+              headers: { 'Authorization': `Bearer ${this.authToken}` }
+          });
+          const stockData = await response.json();
+          return stockData.available >= quantity;
+      } catch (error) {
+          console.error('Error checking stock:', error);
+          return false;
+      }
+  }
+
+  removeFromCart(productId) {
+      this.cart = this.cart.filter(item => item.id !== productId);
+      this.updateStorage();
+  }
+
+  updateStorage() {
+      localStorage.setItem('cart', JSON.stringify(this.cart));
+  }
+
+  getCartTotal() {
+      return this.cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  }
+
+  async checkout() {
+      try {
+          const response = await fetch(`${this.apiBaseUrl}/checkout`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${this.authToken}`
+              },
+              body: JSON.stringify({ items: this.cart })
+          });
+          const result = await response.json();
+          if (response.ok) {
+              console.log('Checkout successful:', result);
+              this.cart = [];
+              this.updateStorage();
+          } else {
+              console.error('Checkout failed:', result);
+          }
+      } catch (error) {
+          console.error('Error processing checkout:', error);
+      }
+  }
+}
 
 export default Cart;

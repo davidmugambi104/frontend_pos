@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getCustomers } from '../../services/api';
 import { Link } from 'react-router-dom';
-import './styles.css';
+import '../css/styles.css';
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState([]);

@@ -1,70 +1,90 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { DataGrid } from '@mui/x-data-grid';
+import { 
+  fetchAdminUsers,
+  updateUserRole,
+  auditUserActions
+} from '../../services/api';
+import UserActionDialog from './UserActionDialog';
+import './css/UserManagement.css';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'username', headerName: 'Username', width: 150 },
+    { field: 'email', headerName: 'Email', width: 200 },
+    { field: 'role', headerName: 'Role', width: 120 },
+    { field: 'lastLogin', headerName: 'Last Login', width: 180 },
+    { field: 'status', headerName: 'Status', width: 120 },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 150,
+      renderCell: (params) => (
+        <button 
+          onClick={() => setSelectedUser(params.row)}
+          className="action-btn"
+        >
+          Manage
+        </button>
+      ),
+    },
+  ];
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const loadUsers = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/users', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        setUsers(response.data.users);
+        const userData = await fetchAdminUsers();
+        setUsers(userData);
         setLoading(false);
-      } catch (err) {
-        setError('Failed to fetch users.');
+      } catch (error) {
+        console.error('User load error:', error);
         setLoading(false);
       }
     };
-    fetchUsers();
+
+    loadUsers();
   }, []);
 
-  const deleteUser = async (userId) => {
+  const handleRoleUpdate = async (userId, newRole) => {
     try {
-      await axios.delete(`http://127.0.0.1:5000/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
+      await updateUserRole(userId, newRole);
+      setUsers(users.map(user => 
+        user.id === userId ? { ...user, role: newRole } : user
+      ));
+      await auditUserActions({
+        action: `Role updated to ${newRole}`,
+        targetUserId: userId
       });
-      setUsers(users.filter((user) => user.id !== userId));
-    } catch (err) {
-      setError('Failed to delete user.');
+    } catch (error) {
+      console.error('Role update failed:', error);
     }
   };
 
-  if (loading) return <div>Loading users...</div>;
-  if (error) return <div>{error}</div>;
-
   return (
-    <div>
-      <h2>User Management</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Role</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.role}</td>
-              <td>
-                <button onClick={() => deleteUser(user.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="user-management">
+      <div className="grid-container">
+        <DataGrid
+          rows={users}
+          columns={columns}
+          pageSize={10}
+          loading={loading}
+          checkboxSelection
+          disableSelectionOnClick
+        />
+      </div>
+
+      {selectedUser && (
+        <UserActionDialog
+          user={selectedUser}
+          onClose={() => setSelectedUser(null)}
+          onRoleUpdate={handleRoleUpdate}
+        />
+      )}
     </div>
   );
 };

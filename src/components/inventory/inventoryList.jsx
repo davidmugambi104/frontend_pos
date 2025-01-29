@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getInventoryTransactions } from '../../services/api'; // Assuming your API helper is set up.
-import './styles.css';
+import '../css/styles.css';
 
 const InventoryTransactionList = () => {
   const [transactions, setTransactions] = useState([]);

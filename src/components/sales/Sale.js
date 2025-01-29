@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getSales } from '../../services/api';
 import { Link } from 'react-router-dom';
-import './sale.css'; // Import the CSS file
+import '../css/styles.css';
 
 const Sale = () => {
   const [sales, setSales] = useState([]);

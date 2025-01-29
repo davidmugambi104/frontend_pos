@@ -214,3 +214,37 @@ export const getInventoryTransactions = async () => {
     throw error;
   }
 };
+export const adminAPI = {
+  login: async (credentials) => {
+    const response = await axios.post('/admin/login', credentials, {
+      headers: { 'X-Admin-Auth': true }
+    });
+    return response.data;
+  },
+
+  getAdminMetrics: async () => {
+    const response = await axios.get('/admin/metrics', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+    });
+    return response.data;
+  },
+
+  auditUserActivity: async () => {
+    const response = await axios.get('/admin/audit', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+    });
+    return response.data;
+  },
+
+  manageSecuritySettings: async (operation, data = null) => {
+    const config = {
+      method: operation === 'get' ? 'get' : 'post',
+      url: '/admin/security',
+      headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+    };
+
+    if (data) config.data = data;
+    const response = await axios(config);
+    return response.data;
+  }
+};

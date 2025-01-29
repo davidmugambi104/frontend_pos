@@ -1,163 +1,180 @@
-/* Signup.css */
+/* signup.css */
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --error: #ef4444;
+  --success: #22c55e;
+  --background: #f8fafc;
+  --text: #0f172a;
+  --border: #e2e8f0;
+}
 
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  body {
-    background-color: #f0f4f7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  /* Signup Container */
+.signup-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 3rem;
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.signup-progress {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  justify-content: center;
+}
+
+.progress-step {
+  width: 40px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.progress-step.active {
+  background: var(--primary);
+  transform: scaleX(1.2);
+}
+
+.progress-step.completed {
+  background: var(--success);
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.signup-form h2 {
+  text-align: center;
+  font-size: 1.875rem;
+  color: var(--text);
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  z-index: 1;
+}
+
+input, select {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid var(--border);
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: var(--background);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.role-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+.error-message {
+  color: var(--error);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  position: absolute;
+}
+
+.server-error {
+  background: var(--error);
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--background);
+  color: var(--text);
+  border: 2px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+.success-state {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.success-icon {
+  font-size: 4rem;
+  color: var(--success);
+  margin-bottom: 1rem;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@media (max-width: 640px) {
   .signup-container {
-    background: linear-gradient(135deg, #ff7e5f, #feb47b);
-    border-radius: 20px;
-    padding: 50px;
-    width: 450px;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-    animation: bounceIn 1s ease-out;
-    transform: translateY(50px);
-    overflow: hidden;
+    margin: 1rem;
+    padding: 2rem;
   }
-  
-  h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    color: white;
-    margin-bottom: 40px;
-    font-weight: 700;
-    animation: slideInFromTop 1s ease-out;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  input, select {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    border: 1px solid #ddd;
-    transition: all 0.3s ease-in-out;
-    outline: none;
-  }
-  
-  input:focus, select:focus {
-    border-color: #feb47b;
-    box-shadow: 0 0 10px rgba(254, 180, 123, 0.8);
-  }
-  
-  input::placeholder, select::placeholder {
-    color: #777;
-    font-style: italic;
-  }
-  
-  button {
-    background-color: #feb47b;
-    color: white;
-    padding: 15px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    transform: scale(1);
-  }
-  
-  button:hover {
-    background-color: #ff7e5f;
-    transform: scale(1.05);
-  }
-  
-  button:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-    transform: scale(1);
-  }
-  
-  /* Success and Error Messages */
-  .success {
-    color: #4CAF50;
-    font-weight: 600;
-    font-size: 1.1rem;
-    text-align: center;
-    margin-top: 15px;
-    animation: fadeIn 1s ease-out;
-  }
-  
-  .error {
-    color: #FF6347;
-    font-weight: 600;
-    font-size: 1.1rem;
-    text-align: center;
-    margin-top: 15px;
-    animation: fadeIn 1s ease-out;
-  }
-  
-  /* Animations */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  @keyframes bounceIn {
-    0% {
-      transform: translateY(50px);
-      opacity: 0;
-    }
-    60% {
-      transform: translateY(-20px);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes slideInFromTop {
-    0% {
-      transform: translateY(-30px);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  
-  /* Media Queries */
-  @media (max-width: 500px) {
-    .signup-container {
-      width: 90%;
-      padding: 30px;
-    }
-  
-    h2 {
-      font-size: 2rem;
-    }
-  
-    input, select {
-      font-size: 1rem;
-    }
-  
-    button {
-      font-size: 1rem;
-      padding: 12px;
-    }
-  }
-  
+}

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { addInventoryTransaction } from '../../services/api'; // Assuming your API helper is set up.
-import './styles.css';
-
+import '../css/styles.css';
 const AddInventoryTransaction = () => {
   const [productId, setProductId] = useState('');
   const [changeQuantity, setChangeQuantity] = useState('');

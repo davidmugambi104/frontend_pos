@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { addCustomer } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
-import './styles.css';
+import '../css/styles.css';
 
 const AddCustomer = () => {
   const [name, setName] = useState('');
