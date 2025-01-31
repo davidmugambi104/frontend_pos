@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getSales } from '../../services/api';
 import { Link } from 'react-router-dom';
-import '../css/styles.css';
+import '../css/styles.css';  // Use 1 `../` (not 2) since `css` is inside `components`
 
 const Sale = () => {
   const [sales, setSales] = useState([]);

@@ -4,9 +4,169 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>POS System</title>
+  <style>
+    :root {
+      --space-color-1: #0a0c27;
+      --space-color-2: #1a1b4b;
+      --neon-purple: #6c1bdb;
+      --neon-blue: #00f3ff;
+      --neon-pink: #ff00ff;
+      --animation-duration: 40s;
+      --grid-opacity: 0.15;
+    }
+    
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: radial-gradient(ellipse at bottom, 
+        var(--space-color-1) 0%, 
+        var(--space-color-2) 100%);
+      position: relative;
+      color: white;
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* Cosmic Background Layers */
+    .cosmic-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      filter: blur(calc(var(--i) * 2px));
+      opacity: calc(0.3 + (var(--i) * 0.15));
+    }
+
+    .cosmic-layer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 70% 20%, var(--neon-purple), transparent 40%),
+        radial-gradient(circle at 30% 80%, var(--neon-blue), transparent 40%),
+        linear-gradient(45deg, var(--neon-pink), transparent);
+      background-blend-mode: screen;
+      animation: nebula-float var(--animation-duration) infinite linear;
+    }
+
+    /* Quantum Grid Overlay */
+    .quantum-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(0deg, 
+          rgba(255,255,255,var(--grid-opacity)) 0 1px, 
+          transparent 1px 30px),
+        repeating-linear-gradient(90deg, 
+          rgba(255,255,255,var(--grid-opacity)) 0 1px, 
+          transparent 1px 30px);
+      mask-image: radial-gradient(circle at center, 
+        rgba(0,0,0,0.8) 20%, 
+        rgba(0,0,0,0.2) 60%, 
+        transparent 100%);
+      animation: grid-rotate 120s linear infinite;
+    }
+
+    /* Holographic Effects */
+    .hologram-effect {
+      position: fixed;
+      inset: 0;
+      background: 
+        repeating-linear-gradient(0deg, 
+          transparent 0px,
+          rgba(255,255,255,0.02) 1px,
+          transparent 2px),
+        linear-gradient(90deg, 
+          rgba(0,255,255,0.05),
+          rgba(255,0,255,0.05));
+      mix-blend-mode: overlay;
+      animation: hologram-scan 4s linear infinite;
+    }
+
+    /* Animations */
+    @keyframes nebula-float {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(2deg) scale(1.05); }
+    }
+
+    @keyframes grid-rotate {
+      from { transform: rotate(0deg) scale(1); }
+      to { transform: rotate(360deg) scale(1.2); }
+    }
+
+    @keyframes hologram-scan {
+      from { background-position: 0 0; }
+      to { background-position: 0 100%; }
+    }
+
+    /* POS Interface Styling */
+    #root {
+      position: relative;
+      z-index: 1;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      min-height: 100vh;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      :root {
+        --animation-duration: 60s;
+        --grid-opacity: 0.1;
+      }
+      
+      #root {
+        padding: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="cosmic-layer" style="--i: 1"></div>
+  <div class="cosmic-layer" style="--i: 2"></div>
+  <div class="quantum-grid"></div>
+  <div class="hologram-effect"></div>
+  
   <div id="root"></div>
-  <!-- This is where React will inject the app -->
+  <!-- React app injection point -->
+
+  <script>
+    // Interactive background elements
+    document.addEventListener('DOMContentLoaded', () => {
+      const root = document.getElementById('root');
+      
+      // Create floating particles
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+          position: fixed;
+          width: 2px;
+          height: 2px;
+          background: rgba(255,255,255,0.5);
+          border-radius: 50%;
+          pointer-events: none;
+          animation: float ${10 + Math.random() * 20}s infinite linear;
+          left: ${Math.random() * 100}%;
+          top: ${Math.random() * 100}%;
+        `;
+        document.body.appendChild(particle);
+      }
+
+      // Add dynamic orb
+      const orb = document.createElement('div');
+      orb.className = 'floating-orb';
+      document.body.appendChild(orb);
+    });
+
+    // Mouse tracking for interactive elements
+    document.addEventListener('mousemove', (e) => {
+      const orb = document.querySelector('.floating-orb');
+      if (orb) {
+        orb.style.transform = `translate(${e.clientX - 50}px, ${e.clientY - 50}px)`;
+      }
+    });
+  </script>
 </body>
 </html>

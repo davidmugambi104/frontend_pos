@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { addSale, getProducts, getCustomers } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
-import '../css/styles.css';
+import '../css/styles.css';  // Use 1 `../` (not 2) since `css` is inside `components`';
 
 const AddSale = () => {
   const [totalAmount, setTotalAmount] = useState(0);

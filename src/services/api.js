@@ -1,4 +1,6 @@
+import axios from 'axios'; // Add this line
 const API_BASE_URL = 'http://127.0.0.1:5000'; // Adjust if necessary
+
 
 // Add Customer
 // export const addCustomer = async (customerData) => {
@@ -247,4 +249,4 @@ export const adminAPI = {
     const response = await axios(config);
     return response.data;
   }
-};
+};     
